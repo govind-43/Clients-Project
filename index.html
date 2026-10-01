@@ -55,6 +55,53 @@
   .field::placeholder { color: #6b736d; }
   .plan { border-top: 1px solid #232B28; transition: background .3s; }
   .plan:hover { background: #111515; }
+  /* ===== FEATURE STAT CARDS ===== */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-size .6s cubic-bezier(.2,.7,.2,1),
+              border-color .35s,
+              transform .35s;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,10,10,.55) 0%,
+      rgba(8,10,10,.78) 55%,
+      rgba(8,10,10,.94) 100%
+    );
+  transition: background .35s;
+}
+
+.stat-card:hover {
+  background-size: 108% 108%;
+}
+
+.stat-card:hover::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,10,10,.38) 0%,
+      rgba(8,10,10,.68) 55%,
+      rgba(8,10,10,.90) 100%
+    );
+}
+
+.stat-card .stat-content {
+  position: relative;
+  z-index: 2;
+             }
+  
   @media (prefers-reduced-motion: reduce) { .rv, .img-rv img { opacity: 1; transform: none; clip-path: none; transition: none; } .btn:hover, .card:hover { transform: none; } }
 </style>
 </head>
@@ -227,10 +274,51 @@
   document.getElementById('links').innerHTML = sections.map(([id, l]) => `<a class="nl" href="#${id}">${l}</a>`).join('');
   document.getElementById('mlinks').innerHTML = sections.map(([id, l]) => `<a class="mm-a hd text-4xl py-4 border-b border-line" href="#${id}">${l}</a>`).join('');
 
-  document.getElementById('stats').innerHTML = ['Personal Training','Strength & Conditioning','Modern Equipment','Flexible Memberships'].map((t, i) => `
-    <div class="rv py-8 md:py-12 px-1 md:px-6 ${i % 2 ? 'border-l border-line' : ''} ${i > 1 ? 'border-t lg:border-t-0 border-line' : ''} ${i === 2 ? 'lg:border-l border-line' : ''}">
-      <div class="hd text-4xl md:text-6xl text-lime">0${i + 1}</div><div class="mt-3 text-xs md:text-sm font-semibold tracking-widest uppercase text-txt">${t}</div></div>`).join('');
+  /* ===== FEATURE STAT CARDS ===== */
 
+const stats = [
+  {
+    number: '01',
+    title: 'Personal Training',
+    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80'
+  },
+  {
+    number: '02',
+    title: 'Strength & Conditioning',
+    image: 'https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&w=1200&q=80'
+  },
+  {
+    number: '03',
+    title: 'Modern Equipment',
+    image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=1200&q=80'
+  },
+  {
+    number: '04',
+    title: 'Flexible Memberships',
+    image: 'https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&w=1200&q=80'
+  }
+];
+
+document.getElementById('stats').innerHTML = stats.map((item, i) => `
+  <div
+    class="stat-card rv py-10 md:py-14 px-5 md:px-7
+    ${i % 2 ? 'border-l border-line' : ''}
+    ${i > 1 ? 'border-t lg:border-t-0 border-line' : ''}
+    ${i === 2 ? 'lg:border-l border-line' : ''}"
+    style="background-image: url('${item.image}');"
+  >
+    <div class="stat-content">
+      <div class="hd text-5xl md:text-7xl text-lime">
+        ${item.number}
+      </div>
+
+      <div class="mt-4 text-xs md:text-sm font-semibold tracking-widest uppercase text-txt">
+        ${item.title}
+      </div>
+    </div>
+  </div>
+`).join('');
+  
   const svc = [
     ['Strength Training', ['Build strength','Improve technique','Progressive training']],
     ['Personal Coaching', ['One-to-one guidance','Personalized programs','Progress tracking']],
